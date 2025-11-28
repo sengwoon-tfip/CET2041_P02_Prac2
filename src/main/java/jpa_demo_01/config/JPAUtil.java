@@ -5,7 +5,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 /**
- * Utility class for obtaining JPA EntityManagers.
+ * Utility class that creates a single EntityManagerFactory and then gives us
+ * EntityManager objects whenever our DAO or service needs database access.
  */
 public class JPAUtil {
 
