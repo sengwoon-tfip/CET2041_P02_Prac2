@@ -1,6 +1,7 @@
-package jpa_demo_01;
+package jpa_demo_01.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.List;
 

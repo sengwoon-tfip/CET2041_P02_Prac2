@@ -1,11 +1,12 @@
-package jpa_demo_01;
+package jpa_demo_01.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jpa_demo_01.dao.EmployeeDAO;
+import jpa_demo_01.entity.Employee;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class EmployeeTest {
@@ -21,7 +22,7 @@ public class EmployeeTest {
         EntityManagerFactory emf =
             Persistence.createEntityManagerFactory("EmployeeService", persistenceMap);
         EntityManager em = emf.createEntityManager();
-        EmployeeService service = new EmployeeService(em);
+        EmployeeDAO service = new EmployeeDAO(em);
         Employee emp = null;
 
 //        em.getTransaction().begin();

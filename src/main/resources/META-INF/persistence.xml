@@ -16,7 +16,7 @@
         the class tag is not required for this case as the managed Entity class
         is located at the root folder.
 
-        <class>jpa_demo_01.Employee</class>
+        <class>jpa_demo_01.entity.Employee</class>
         -->
 
         <properties>

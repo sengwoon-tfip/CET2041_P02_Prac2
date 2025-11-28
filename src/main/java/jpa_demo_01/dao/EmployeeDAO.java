@@ -1,14 +1,15 @@
-package jpa_demo_01;
+package jpa_demo_01.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jpa_demo_01.entity.Employee;
 
 import java.util.List;
 
-public class EmployeeService {
+public class EmployeeDAO {
     protected EntityManager em;
 
-    public EmployeeService(EntityManager em) {
+    public EmployeeDAO(EntityManager em) {
         this.em = em;
     }
 
