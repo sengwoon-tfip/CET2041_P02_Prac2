@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class EmployeeTest {
     
-    static final String DBNAME = "jpa_demo";
+    static final String DBNAME = "employees";
     
     public static void main(String[] args) {
         // overriding the existing properties in persistence.xml
