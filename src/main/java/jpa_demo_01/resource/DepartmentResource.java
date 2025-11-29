@@ -1,11 +1,12 @@
 package jpa_demo_01.resource;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.persistence.EntityManager;
+import jpa_demo_01.config.JPAUtil;
 import jpa_demo_01.dao.DepartmentDAO;
 import jpa_demo_01.entity.Department;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
 
@@ -13,15 +14,20 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class DepartmentResource {
 
-    private final DepartmentDAO departmentDAO = new DepartmentDAO();
-
     /**
+     * Endpoint 1:
      * GET /api/departments
-     * Returns all departments (dept_no + dept_name) as JSON.
+     * Returns all departments (no DTO).
      */
     @GET
-    public List<Department> getAllDepartments() {
-        // Return the entities directly – Jersey + Jackson will turn this into JSON
-        return departmentDAO.findAll();
+    public Response getAllDepartments() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            DepartmentDAO departmentDAO = new DepartmentDAO(em);
+            List<Department> departments = departmentDAO.findAll();
+            return Response.ok(departments).build();
+        } finally {
+            em.close();   // close EM
+        }
     }
 }

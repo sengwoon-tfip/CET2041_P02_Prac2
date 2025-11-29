@@ -16,20 +16,10 @@ public class Department {
     public Department() {
     }
 
-    public String getDeptNo() {
-        return deptNo;
-    }
+    public String getDeptNo() { return deptNo; }
+    public void setDeptNo(String deptNo) { this.deptNo = deptNo; }
 
-    public void setDeptNo(String deptNo) {
-        this.deptNo = deptNo;
-    }
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
+    public String getDeptName() { return deptName; }
+    public void setDeptName(String deptName) { this.deptName = deptName; }
 }
 

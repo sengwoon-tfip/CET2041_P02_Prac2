@@ -13,8 +13,8 @@ public class Employee {
         F
     }
     @Id
-    @Column(name="emp_no")
-    private int id;
+    @Column(name = "emp_no")
+    private Integer empNo;
 
     @Column(name="birth_date")
     private LocalDate birthDate;
@@ -32,29 +32,26 @@ public class Employee {
     @Column(name="hire_date")
     private LocalDate hireDate;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private List<Titles> titles;
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<DeptEmp> deptEmpList;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<DeptManager> deptManagerList;
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Salaries> salaries;
 
-//    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-//    private List<DeptMgrs> deptMgrs;
-//
-//    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-//    private List<EmpDepts> empDepts;
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Titles> titles;
+
 
     public Employee() {}
-    public Employee(int id) {
-        this.id = id;
+    public Employee(int empNo) {
+        this.empNo = empNo;
     }
 
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
+    public Integer getEmpNo() { return empNo; }
+    public void setEmpNo(Integer empNo) { this.empNo = empNo; }
 
     public LocalDate getBirthDate() { return birthDate; }
     public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
@@ -79,11 +76,19 @@ public class Employee {
     public LocalDate getHireDate() { return hireDate; }
     public void setHireDate(LocalDate hireDate) { this.hireDate = hireDate; }
 
+    public List<DeptEmp> getDeptEmpList() { return deptEmpList; }
+
+    public List<DeptManager> getDeptManagerList() { return deptManagerList; }
+
+    public List<Salaries> getSalaries() { return salaries; }
+
+    public List<Titles> getTitles() { return titles; }
+
     @Override
     public String toString() {
         return String.format("Id: %s, Birth date: %s, First name: %s, " +
                         "Last name: %s, Gender: %s, Hire date: %s",
-                this.id, this.birthDate, this.firstName, this.lastName,
+                this.empNo, this.birthDate, this.firstName, this.lastName,
                 this.gender, this.hireDate);
     }
 }

@@ -1,7 +1,7 @@
 package jpa_demo_01.entity;
 
 import jakarta.persistence.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.util.Objects;
@@ -19,6 +19,7 @@ class TitleId implements Serializable {
     private LocalDate fromDate;
 
     public TitleId() {}
+
     public TitleId(int empNo, String title, LocalDate fromDate) {
         this.empNo = empNo;
         this.title = title;
@@ -60,7 +61,9 @@ public class Titles {
     private LocalDate toDate;
 
     @ManyToOne
+    @MapsId("empNo")
     @JoinColumn(name = "emp_no", insertable = false, updatable = false)
+    @JsonIgnore
     private Employee employee;
 
     public Titles() {}
