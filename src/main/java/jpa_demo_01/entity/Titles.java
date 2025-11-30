@@ -1,5 +1,6 @@
 package jpa_demo_01.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ class TitleId implements Serializable {
     @Column(name = "title")
     private String title;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "from_date")
     private LocalDate fromDate;
 
@@ -57,6 +59,7 @@ public class Titles {
     @EmbeddedId
     private TitleId titleId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "to_date")
     private LocalDate toDate;
 

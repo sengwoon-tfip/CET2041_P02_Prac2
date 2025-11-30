@@ -1,5 +1,6 @@
 package jpa_demo_01.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -59,9 +60,11 @@ public class DeptEmp {
     @JoinColumn(name = "dept_no")
     private Department department;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "from_date")
     private LocalDate fromDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "to_date")
     private LocalDate toDate;
 

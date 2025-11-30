@@ -1,5 +1,6 @@
 package jpa_demo_01.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ public class Employee {
     @Column(name = "emp_no")
     private Integer empNo;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name="birth_date")
     private LocalDate birthDate;
 
@@ -29,6 +31,7 @@ public class Employee {
     @Column(name="gender")
     private gender gender;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name="hire_date")
     private LocalDate hireDate;
 

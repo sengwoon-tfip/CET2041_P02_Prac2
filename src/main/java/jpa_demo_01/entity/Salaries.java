@@ -1,5 +1,6 @@
 package jpa_demo_01.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ class SalaryId implements Serializable {
     @Column(name = "emp_no")
     private int empNo;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "from_date")
     private LocalDate fromDate;
 
@@ -52,6 +54,7 @@ public class Salaries {
     @Column(name = "salary")
     private int salary;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "to_date")
     private LocalDate toDate;
 
