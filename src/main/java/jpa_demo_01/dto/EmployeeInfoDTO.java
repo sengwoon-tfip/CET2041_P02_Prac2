@@ -1,11 +1,14 @@
 package jpa_demo_01.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class EmployeeInfoDTO {
     private int empNo;
     private String firstName;
     private String lastName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate hireDate;
 
     public EmployeeInfoDTO(int empNo, String firstName, String lastName, LocalDate hireDate) {

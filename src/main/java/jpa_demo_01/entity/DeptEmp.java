@@ -44,6 +44,13 @@ class DeptEmpId implements Serializable {
 
 @Entity
 @Table(name = "dept_emp")
+@NamedQuery(
+        name = "DeptEmp.findEmployeesByDept",
+        query = "SELECT new jpa_demo_01.dto.EmployeeInfoDTO(e.empNo, " +
+                "e.firstName, e.lastName, e.hireDate) FROM DeptEmp de JOIN " +
+                "de.employee e WHERE de.department.deptNo = :deptNo ORDER BY e.empNo"
+)
+
 public class DeptEmp {
 
     @EmbeddedId
