@@ -10,19 +10,35 @@ import jpa_demo_01.entity.TitleId;
 
 import java.time.LocalDate;
 
-import java.util.List;
-
+/**
+ * Data Access Object (DAO) for {@link Employee} and related history tables
+ * such as {@link Titles} and {@link Salaries}.
+ *
+ * <p>Provides helper methods used by REST resources to look up employees
+ * and to apply promotion logic (title and salary history updates).</p>
+ */
 public class EmployeeDAO {
 
+    /**
+     * JPA {@link EntityManager} used for all database operations in this DAO.
+     */
     protected final EntityManager em;
 
+    /**
+     * Constructs an {@code EmployeeDAO} with the given {@link EntityManager}.
+     *
+     * @param em the entity manager to use for persistence operations
+     */
     public EmployeeDAO(EntityManager em) {
         this.em = em;
     }
 
     /**
      * Endpoint 2 helper:
-     * Find a single employee by employee number (primary key).
+     * Finds a single employee by employee number (primary key).
+     *
+     * @param empNo the employee number to search for
+     * @return the matching {@link Employee}, or {@code null} if none found
      */
     public Employee findEmployee(int empNo) {
         return em.find(Employee.class, empNo);
@@ -30,17 +46,32 @@ public class EmployeeDAO {
 
     /**
      * Endpoint 4 helper:
-     * Perform promotion for a single employee.
+     * Performs a promotion for a single employee.
      *
-     * - Closes current title (to_date = 9999-01-01) if any
-     * - Inserts a new title row
-     * - If newSalary is not null:
-     *      - closes current salary (to_date = 9999-01-01) if any
-     *      - inserts a new salary row
+     * <p>Operations performed:</p>
+     * <ul>
+     *     <li>Locate the current title row with {@code to_date = 9999-01-01} and
+     *         close it by setting {@code to_date = effectiveFrom - 1 day}, if it exists.</li>
+     *     <li>Insert a new title row effective from {@code effectiveFrom}.</li>
+     *     <li>If {@code newSalary} is not {@code null}:
+     *         <ul>
+     *             <li>Locate the current salary row with {@code to_date = 9999-01-01} and
+     *                 close it by setting {@code to_date = effectiveFrom - 1 day}, if it exists.</li>
+     *             <li>Insert a new salary row effective from {@code effectiveFrom}.</li>
+     *         </ul>
+     *     </li>
+     * </ul>
      *
-     * This method assumes the caller has already:
-     *  - begun a transaction
-     *  - verified that employee is not null
+     * <p><strong>Preconditions:</strong></p>
+     * <ul>
+     *     <li>The caller has already begun a transaction.</li>
+     *     <li>{@code employee} is a managed entity and not {@code null}.</li>
+     * </ul>
+     *
+     * @param employee      the employee being promoted (must be managed)
+     * @param newTitle      the new job title to assign
+     * @param newSalary     the new salary to set; if {@code null}, salary history is unchanged
+     * @param effectiveFrom the date from which the promotion takes effect
      */
     public void promoteEmployee(Employee employee,
                                 String newTitle,
