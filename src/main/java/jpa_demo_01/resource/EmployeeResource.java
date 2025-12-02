@@ -51,6 +51,19 @@ public class EmployeeResource {
      * Endpoint 4:
      * POST /api/employees/promotions
      * Consumes JSON describing a single employee promotion.
+     *
+     * <pre>
+     *     {@code
+     *     E.g. Valid JSON body input:
+     *      {
+     *         "empNo": 10001,
+     *         "newTitle": "Senior Engineer 3",
+     *         "newSalary": 100000,
+     *         "effectiveFrom": "2022-01-01"
+     *      }
+     *      }
+     * </pre>
+     *
      */
     @POST
     @Path("/promotions")
