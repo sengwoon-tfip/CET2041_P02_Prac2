@@ -70,7 +70,7 @@ public class EmployeeResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response promoteEmployee(PromotionRequestDTO request) {
 
-        // Basic validation
+        // Basic validation (HTTP concern)
         if (request == null ||
                 request.getEmpNo() <= 0 ||
                 request.getNewTitle() == null || request.getNewTitle().isBlank() ||
@@ -81,25 +81,16 @@ public class EmployeeResource {
                     .build();
         }
 
-        LocalDate effectiveFrom;
-        try {
-            effectiveFrom = request.getEffectiveFrom(); // yyyy-MM-dd
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("effectiveFrom must be in format yyyy-MM-dd")
-                    .build();
-        }
-
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
 
         try {
             tx.begin();
 
-            // 1. Ensure employee exists
             EmployeeDAO employeeDAO = new EmployeeDAO(em);
-            Employee employee = employeeDAO.findEmployee(request.getEmpNo());
 
+            // 1. Ensure employee exists
+            Employee employee = employeeDAO.findEmployee(request.getEmpNo());
             if (employee == null) {
                 tx.rollback();
                 return Response.status(Response.Status.NOT_FOUND)
@@ -107,73 +98,17 @@ public class EmployeeResource {
                         .build();
             }
 
-            LocalDate maxDate = LocalDate.of(9999, 1, 1);
-
-            // 2. Close off current title (to_date = '9999-01-01'), if any
-            TypedQuery<Titles> currentTitleQuery = em.createNamedQuery(
-                    "Titles.findCurrentTitle",
-                    Titles.class);
-            currentTitleQuery.setParameter("empNo", request.getEmpNo());
-            currentTitleQuery.setParameter("maxDate", maxDate);
-
-            Titles currentTitle = currentTitleQuery
-                    .getResultStream()
-                    .findFirst()
-                    .orElse(null);
-
-            if (currentTitle != null) {
-                // End current title the day before the new one starts
-                currentTitle.setToDate(effectiveFrom.minusDays(1));
-            }
-
-            // 3. Insert new title row
-            TitleId newTitleId = new TitleId(
-                    request.getEmpNo(),
+            // 2. Delegate promotion logic to DAO
+            employeeDAO.promoteEmployee(
+                    employee,
                     request.getNewTitle(),
-                    effectiveFrom
+                    request.getNewSalary(),
+                    request.getEffectiveFrom()
             );
-
-            Titles newTitle = new Titles();
-            newTitle.setTitleId(newTitleId);
-            newTitle.setEmployee(employee);
-            newTitle.setToDate(maxDate);  // still current until changed later
-
-            em.persist(newTitle);
-
-            // 4. If newSalary provided, update salary history too
-            if (request.getNewSalary() != null) {
-
-                TypedQuery<Salaries> currentSalaryQuery = em.createNamedQuery(
-                        "Salaries.findCurrentSalary",
-                        Salaries.class);
-                currentSalaryQuery.setParameter("empNo", request.getEmpNo());
-                currentSalaryQuery.setParameter("maxDate", maxDate);
-
-                Salaries currentSalary = currentSalaryQuery
-                        .getResultStream()
-                        .findFirst()
-                        .orElse(null);
-
-                if (currentSalary != null) {
-                    currentSalary.setToDate(effectiveFrom.minusDays(1));
-                }
-
-                SalaryId newSalaryId = new SalaryId(
-                        request.getEmpNo(),
-                        effectiveFrom
-                );
-
-                Salaries newSalary = new Salaries();
-                newSalary.setSalaryId(newSalaryId);
-                newSalary.setEmployee(employee);
-                newSalary.setSalary(request.getNewSalary());
-                newSalary.setToDate(maxDate);
-
-                em.persist(newSalary);
-            }
 
             tx.commit();
 
+            // 3. Build HTTP response
             return Response.ok("Employee " + request.getEmpNo() +
                     " promoted to '" + request.getNewTitle() + "'" +
                     (request.getNewSalary() != null
