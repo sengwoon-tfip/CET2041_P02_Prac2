@@ -11,14 +11,32 @@ import jpa_demo_01.entity.Department;
 
 import java.util.List;
 
+
+/**
+ * REST resource exposing operations related to departments.
+ *
+ * <p>Base path: {@code /api/departments}</p>
+ *
+ * <p>Endpoints:</p>
+ * <ul>
+ *     <li>{@code GET /api/departments} — list all departments.</li>
+ *     <li>{@code GET /api/departments/{deptNo}/employees?pageNo=1} —
+ *         paginated list of employees in a department.</li>
+ * </ul>
+ */
 @Path("/departments")
 @Produces(MediaType.APPLICATION_JSON)
 public class DepartmentResource {
 
     /**
      * Endpoint 1:
+     * <pre>
      * GET /api/departments
-     * Returns list of all departments (entity, no DTO).
+     * </pre>
+     * Returns a list of all departments.
+     *
+     * @return HTTP 200 (OK) with a list of {@link Department},
+     *         or an empty list if none are found
      */
     @GET
     public Response getAllDepartments() {
@@ -34,8 +52,15 @@ public class DepartmentResource {
 
     /**
      * Endpoint 3:
+     * <pre>
      * GET /api/departments/{deptNo}/employees?pageNo=1
-     * Returns a page of EmployeeInfoDTO (20 per page).
+     * </pre>
+     * Returns a page of {@link EmployeeInfoDTO} (20 per page) for a department.
+     *
+     * @param deptNo the department number (path parameter)
+     * @param pageNo the page number to retrieve (query parameter, defaults to 1)
+     * @return HTTP 200 (OK) with a list of employees, or
+     *         HTTP 404 (Not Found) if the department is invalid or has no employees
      */
     @GET
     @Path("/{deptNo}")
@@ -52,8 +77,6 @@ public class DepartmentResource {
                     departmentDAO.findEmployeesByDeptNo(deptNo, pageNo, PAGE_SIZE);
 
             if (employeeDTOs.isEmpty()) {
-                // Could mean invalid deptNo OR just no employees; for practicum,
-                // we follow the pattern your instructor suggested.
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("Department " + deptNo + " not found or has no employees.")
                         .build();
