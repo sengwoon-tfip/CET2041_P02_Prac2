@@ -21,7 +21,6 @@ public class EmployeeInfoDTO {
     public int getEmpNo() {
         return empNo;
     }
-
     public void setEmpNo(int empNo) {
         this.empNo = empNo;
     }
@@ -29,7 +28,6 @@ public class EmployeeInfoDTO {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -37,7 +35,6 @@ public class EmployeeInfoDTO {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -45,7 +42,6 @@ public class EmployeeInfoDTO {
     public LocalDate getHireDate() {
         return hireDate;
     }
-
     public void setHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
     }

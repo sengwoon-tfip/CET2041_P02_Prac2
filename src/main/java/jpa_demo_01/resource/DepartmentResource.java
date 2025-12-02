@@ -18,7 +18,7 @@ public class DepartmentResource {
     /**
      * Endpoint 1:
      * GET /api/departments
-     * Returns all departments (no DTO).
+     * Returns all departments
      */
     @GET
     public Response getAllDepartments() {
