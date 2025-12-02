@@ -2,6 +2,7 @@ package jpa_demo_01.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jpa_demo_01.dto.PromotionRequestDTO;
 import jpa_demo_01.entity.Employee;
 
 import java.util.List;

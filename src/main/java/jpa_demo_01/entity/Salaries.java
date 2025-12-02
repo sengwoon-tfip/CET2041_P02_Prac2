@@ -4,46 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
-import java.io.Serializable;
-import java.util.Objects;
-
-@Embeddable
-class SalaryId implements Serializable {
-
-    @Column(name = "emp_no")
-    private int empNo;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Column(name = "from_date")
-    private LocalDate fromDate;
-
-    public SalaryId() {}
-    public SalaryId(int empNo, LocalDate fromDate) {
-        this.empNo = empNo;
-        this.fromDate = fromDate;
-    }
-
-    public int getEmpNo() { return empNo; }
-    public void setEmpNo(int empNo) { this.empNo = empNo; }
-
-    public LocalDate getFromDate() { return fromDate; }
-    public void setFromDate(LocalDate fromDate) { this.fromDate = fromDate; }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SalaryId)) return false;
-        SalaryId that = (SalaryId) o;
-        return empNo == that.empNo &&
-                Objects.equals(fromDate, that.fromDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(empNo, fromDate);
-    }
-}
 
 @Entity
 @Table(name="salaries")
@@ -66,8 +26,9 @@ public class Salaries {
 
     public Salaries() {}
 
-    public Salaries(SalaryId salaryId, int salary, LocalDate toDate) {
+    public Salaries(SalaryId salaryId, Employee employee, int salary, LocalDate toDate) {
         this.salaryId = salaryId;
+        this.employee = employee;
         this.salary = salary;
         this.toDate = toDate;
     }
@@ -75,8 +36,11 @@ public class Salaries {
     public SalaryId getSalaryId() { return salaryId; }
     public void setSalaryId(SalaryId salaryId) { this.salaryId = salaryId; }
 
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
+
     public int getSalary() { return salary; }
-    public void setSalary(int salary) { this.salary = salary; }
+    public void setSalary(Integer salary) { this.salary = salary; }
 
     public LocalDate getToDate() { return toDate; }
     public void setToDate(LocalDate toDate) { this.toDate = toDate; }
