@@ -8,31 +8,63 @@ import java.time.LocalDate;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Composite primary key class for DeptManager entity.
+ * Represents the relationship between employee and department
+ * in a managerial role.
+ */
 @Embeddable
 class DeptManagerId implements Serializable {
 
+    /**
+     * Employee number in the composite key.
+     */
     @Column(name = "emp_no")
     private Integer empNo;
 
+    /**
+     * Department number in the composite key.
+     */
     @Column(name = "dept_no")
     private String deptNo;
 
+    /**
+     * Default constructor
+     */
     public DeptManagerId() {
     }
 
+    /**
+     * Constructs a composite key using employee number and department number.
+     *
+     * @param empNo  Employee number
+     * @param deptNo Department number
+     */
     public DeptManagerId(Integer empNo, String deptNo) {
         this.empNo = empNo;
         this.deptNo = deptNo;
     }
 
+    /**
+     * @return the employee number
+     */
     public Integer getEmpNo() {
         return empNo;
     }
 
+    /**
+     * @return the department number
+     */
     public String getDeptNo() {
         return deptNo;
     }
 
+    /**
+     * Compares this composite key to another
+     *
+     * @param o the other object
+     * @return true if both keys match, false if does not match
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -42,55 +74,97 @@ class DeptManagerId implements Serializable {
                 Objects.equals(deptNo, that.deptNo);
     }
 
+    /**
+     * Generates hash code based on the key fields.
+     *
+     * @return the hash code
+     */
     @Override
     public int hashCode() {
         return Objects.hash(empNo, deptNo);
     }
 }
 
+/**
+ * Entity representing the `dept_manager` table.
+ * Maps employees to the departments they manage, including date ranges.
+ */
 @Entity
 @Table(name = "dept_manager")
 public class DeptManager {
 
+    /**
+     * Composite primary key mapping employee and department IDs.
+     */
     @EmbeddedId
     private DeptManagerId id;
 
+    /**
+     * Employee entity associated with the manager record.
+     * Mapped via empNo portion in composite key.
+     */
     @ManyToOne
     @MapsId("empNo")
     @JoinColumn(name = "emp_no")
     @JsonIgnore
     private Employee employee;
 
+    /**
+     * Department entity associated with the manager record.
+     * Mapped via deptNo in the composite key.
+     */
     @ManyToOne
     @MapsId("deptNo")
     @JoinColumn(name = "dept_no")
     private Department department;
 
+    /**
+     * The start date for the manager's term.
+     */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "from_date")
     private LocalDate fromDate;
 
+    /**
+     * The end date for the manager's term.
+     */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "to_date")
     private LocalDate toDate;
 
+    /**
+     * Default constructor
+     */
     public DeptManager() {
     }
 
+    /**
+     * @return the composite primary key for this manager record
+     */
     public DeptManagerId getId() {
         return id;
     }
 
+    /**
+     * @return the department associated with this manager record
+     */
     public Department getDepartment() {
         return department;
     }
 
+    /**
+     * @return the start date of the manager
+     */
     public LocalDate getFromDate() {
         return fromDate;
     }
 
+    /**
+     * @return the end date of the manager
+     */
     public LocalDate getToDate() {
         return toDate;
     }
 }
+
 
