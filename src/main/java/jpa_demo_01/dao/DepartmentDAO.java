@@ -24,7 +24,9 @@ public class DepartmentDAO {
     public List<EmployeeInfoDTO> findEmployeesByDeptNo(String deptNo, int page,
                                                        int pageLimit) {
         int firstResult = (page - 1) * pageLimit;
-        TypedQuery<EmployeeInfoDTO> query = em.createNamedQuery("DeptEmp.findEmployeesByDept", EmployeeInfoDTO.class);
+        TypedQuery<EmployeeInfoDTO> query =
+                em.createNamedQuery("DeptEmp.findEmployeesByDept",
+                        EmployeeInfoDTO.class);
 
         query.setParameter("deptNo", deptNo);
         query.setFirstResult(firstResult);

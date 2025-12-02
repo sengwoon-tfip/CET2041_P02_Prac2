@@ -7,6 +7,11 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="salaries")
+@NamedQuery(
+        name = "Salaries.findCurrentSalary",
+        query = "SELECT s FROM Salaries s " +
+                "WHERE s.salaryId.empNo = :empNo AND s.toDate = :maxDate"
+)
 public class Salaries {
     @EmbeddedId
     private SalaryId salaryId;

@@ -110,9 +110,8 @@ public class EmployeeResource {
             LocalDate maxDate = LocalDate.of(9999, 1, 1);
 
             // 2. Close off current title (to_date = '9999-01-01'), if any
-            TypedQuery<Titles> currentTitleQuery = em.createQuery(
-                    "SELECT t FROM Titles t " +
-                            "WHERE t.titleId.empNo = :empNo AND t.toDate = :maxDate",
+            TypedQuery<Titles> currentTitleQuery = em.createNamedQuery(
+                    "Titles.findCurrentTitle",
                     Titles.class);
             currentTitleQuery.setParameter("empNo", request.getEmpNo());
             currentTitleQuery.setParameter("maxDate", maxDate);
@@ -144,9 +143,8 @@ public class EmployeeResource {
             // 4. If newSalary provided, update salary history too
             if (request.getNewSalary() != null) {
 
-                TypedQuery<Salaries> currentSalaryQuery = em.createQuery(
-                        "SELECT s FROM Salaries s " +
-                                "WHERE s.salaryId.empNo = :empNo AND s.toDate = :maxDate",
+                TypedQuery<Salaries> currentSalaryQuery = em.createNamedQuery(
+                        "Salaries.findCurrentSalary",
                         Salaries.class);
                 currentSalaryQuery.setParameter("empNo", request.getEmpNo());
                 currentSalaryQuery.setParameter("maxDate", maxDate);
