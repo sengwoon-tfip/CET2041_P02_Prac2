@@ -14,7 +14,7 @@ import org.glassfish.jersey.server.ResourceConfig;
  *
  * <p>Responsibilities:
  * <ul>
- *     <li>Registers the base URI path for all REST endpoints ("/api").</li>
+ *     <li>Registers the base URI path for all REST endpoints ("/").</li>
  *     <li>Configures Jersey to scan the {@code jpa_demo_01.resource} package
  *         for classes annotated with {@code @Path}.</li>
  *     <li>Enables Jackson support for JSON serialization/deserialization.</li>
@@ -24,7 +24,7 @@ import org.glassfish.jersey.server.ResourceConfig;
  * @see org.glassfish.jersey.jackson.JacksonFeature
  */
 
-@ApplicationPath("/api")
+@ApplicationPath("/")
 public class ApplicationConfig extends ResourceConfig {
 
     /**
