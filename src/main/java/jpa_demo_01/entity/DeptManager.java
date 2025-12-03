@@ -9,83 +9,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Composite primary key class for DeptManager entity.
- * Represents the relationship between employee and department
- * in a managerial role.
- */
-@Embeddable
-class DeptManagerId implements Serializable {
-
-    /**
-     * Employee number in the composite key.
-     */
-    @Column(name = "emp_no")
-    private Integer empNo;
-
-    /**
-     * Department number in the composite key.
-     */
-    @Column(name = "dept_no")
-    private String deptNo;
-
-    /**
-     * Default constructor
-     */
-    public DeptManagerId() {
-    }
-
-    /**
-     * Constructs a composite key using employee number and department number.
-     *
-     * @param empNo  Employee number
-     * @param deptNo Department number
-     */
-    public DeptManagerId(Integer empNo, String deptNo) {
-        this.empNo = empNo;
-        this.deptNo = deptNo;
-    }
-
-    /**
-     * @return the employee number
-     */
-    public Integer getEmpNo() {
-        return empNo;
-    }
-
-    /**
-     * @return the department number
-     */
-    public String getDeptNo() {
-        return deptNo;
-    }
-
-    /**
-     * Compares this composite key to another
-     *
-     * @param o the other object
-     * @return true if both keys match, false if does not match
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DeptManagerId)) return false;
-        DeptManagerId that = (DeptManagerId) o;
-        return Objects.equals(empNo, that.empNo) &&
-                Objects.equals(deptNo, that.deptNo);
-    }
-
-    /**
-     * Generates hash code based on the key fields.
-     *
-     * @return the hash code
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(empNo, deptNo);
-    }
-}
-
-/**
  * Entity representing the `dept_manager` table.
  * Maps employees to the departments they manage, including date ranges.
  */
@@ -146,10 +69,38 @@ public class DeptManager {
     }
 
     /**
+     * @param id sets the manager id
+     */
+    public void setId(DeptManagerId id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the employee for this manager record
+     */
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    /**
+     * @param employee sets the employee
+     */
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    /**
      * @return the department associated with this manager record
      */
     public Department getDepartment() {
         return department;
+    }
+
+    /**
+     * @param department sets the manager department
+     */
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     /**
@@ -160,10 +111,24 @@ public class DeptManager {
     }
 
     /**
+     * @param fromDate sets the manager promotion From date
+     */
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    /**
      * @return the end date of the manager
      */
     public LocalDate getToDate() {
         return toDate;
+    }
+
+    /**
+     * @param toDate sets the manager end date
+     */
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
     }
 }
 

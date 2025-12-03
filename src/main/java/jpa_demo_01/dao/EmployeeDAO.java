@@ -2,11 +2,7 @@ package jpa_demo_01.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jpa_demo_01.entity.Employee;
-import jpa_demo_01.entity.Salaries;
-import jpa_demo_01.entity.SalaryId;
-import jpa_demo_01.entity.Titles;
-import jpa_demo_01.entity.TitleId;
+import jpa_demo_01.entity.*;
 
 import java.time.LocalDate;
 
@@ -114,6 +110,40 @@ public class EmployeeDAO {
         newTitleEntity.setToDate(maxDate);
 
         em.persist(newTitleEntity);
+
+        // --- Insert new row into dept_manager table if employee is promoted to "Manager" ---
+
+        if (newTitle.equalsIgnoreCase("Manager")) {
+
+            // 1) Find current dept for this employee (from dept_emp)
+            DeptEmp currentDeptEmp = em.createQuery(
+                    "SELECT de FROM DeptEmp de " +
+                            "WHERE de.employee.empNo = :empNo " +
+                            "AND de.toDate = :maxDate",
+                    DeptEmp.class)
+                    .setParameter("empNo", empNo)
+                    .setParameter("maxDate", maxDate)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            Department dept = currentDeptEmp.getDepartment();
+
+            // 2_ Build the new dept_manager row
+            DeptManagerId newDeptManagerId = new DeptManagerId(
+                    empNo,
+                    dept.getDeptNo()
+            );
+
+            DeptManager manager = new DeptManager();
+            manager.setId(newDeptManagerId);
+            manager.setEmployee(employee);
+            manager.setDepartment(dept);
+            manager.setFromDate(effectiveFrom);
+            manager.setToDate(maxDate);
+
+            em.persist(manager);
+        }
 
         // --- Salary history (optional) ---
 
