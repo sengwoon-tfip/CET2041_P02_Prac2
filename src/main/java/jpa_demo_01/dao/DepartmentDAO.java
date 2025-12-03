@@ -64,8 +64,19 @@ public class DepartmentDAO {
                         EmployeeInfoDTO.class);
 
         query.setParameter("deptNo", deptNo);
-        query.setFirstResult(firstResult);
-        query.setMaxResults(pageLimit);
-        return query.getResultList();
+
+            query.setFirstResult(firstResult);
+            query.setMaxResults(pageLimit);
+            return query.getResultList();
+
+    }
+
+    public long countEmployeesInDept(String deptNo) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(de) FROM DeptEmp de WHERE de.department.deptNo = :deptNo",
+                Long.class
+        );
+        query.setParameter("deptNo", deptNo);
+        return query.getSingleResult();
     }
 }
