@@ -1,5 +1,6 @@
 package jpa_demo_01.resource;
 
+import jakarta.persistence.TypedQuery;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -10,6 +11,8 @@ import jpa_demo_01.config.JPAUtil;
 import jpa_demo_01.dao.EmployeeDAO;
 import jpa_demo_01.dto.PromotionRequestDTO;
 import jpa_demo_01.entity.Employee;
+
+import java.time.LocalDate;
 
 /**
  * REST resource providing endpoints related to employees.
@@ -100,6 +103,24 @@ public class EmployeeResource {
 
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
+
+        LocalDate effectiveFrom = request.getEffectiveFrom();
+
+        // Prevent same-date promotions
+        TypedQuery<Long> duplicateQuery = em.createQuery(
+                "SELECT COUNT(t) FROM Titles t " +
+                        "WHERE t.titleId.empNo = :empNo AND t.titleId.fromDate = :fromDate",
+                Long.class
+        );
+        duplicateQuery.setParameter("empNo", request.getEmpNo());
+        duplicateQuery.setParameter("fromDate", effectiveFrom);
+
+        if (duplicateQuery.getSingleResult() > 0) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Employee already has a promotion effective on " + effectiveFrom)
+                    .build();
+        }
+
 
         try {
             tx.begin();
