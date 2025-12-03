@@ -8,6 +8,10 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "departments")
+@NamedQuery(
+        name = "Department.findAllDepartments",
+        query = "SELECT d FROM Department d"
+)
 public class Department {
     /**
      * Department number associated with the record.
