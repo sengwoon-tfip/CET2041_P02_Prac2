@@ -73,12 +73,40 @@ public class DepartmentResource {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             DepartmentDAO departmentDAO = new DepartmentDAO(em);
+
+            // 1. pageNo must be >= 1
+            if (pageNo < 1) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("pageNo must be >= 1")
+                        .build();
+            }
+
+            // 2. count employees in dept
+            long totalEmployees = departmentDAO.countEmployeesInDept(deptNo);
+
+            if (totalEmployees == 0) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("No employees found for department " + deptNo)
+                        .build();
+            }
+
+            // 3. compute max pages
+            long maxPage = (long) Math.ceil(totalEmployees / (double) PAGE_SIZE);
+
+            if (pageNo > maxPage) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Requested pageNo " + pageNo +
+                                " exceeds max available page " + maxPage)
+                        .build();
+            }
+
+            // 4. return results normally
             List<EmployeeInfoDTO> employeeDTOs =
                     departmentDAO.findEmployeesByDeptNo(deptNo, pageNo, PAGE_SIZE);
 
             if (employeeDTOs.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
-                        .entity("Department " + deptNo + " not found or has no employees.")
+                        .entity("Department " + deptNo + " not found.")
                         .build();
             }
 
