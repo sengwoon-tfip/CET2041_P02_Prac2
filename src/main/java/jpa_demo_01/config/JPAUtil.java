@@ -32,8 +32,16 @@ public class JPAUtil {
      * <p>The name must match the persistence-unit name in {@code persistence.xml}
      * (here, {@code "EmployeesPU"}).</p>
      */
-    private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("EmployeesPU");
+    private static EntityManagerFactory emf;
+
+    private JPAUtil() {}
+
+    public static synchronized EntityManagerFactory getEntityManagerFactory() {
+        if (emf == null) {
+            emf = Persistence.createEntityManagerFactory("EmployeesPU");
+        }
+        return emf;
+    }
 
     /**
      * Creates and returns a new {@link EntityManager} from the singleton factory.
@@ -41,7 +49,7 @@ public class JPAUtil {
      * @return a new {@code EntityManager} instance; caller is responsible for closing it
      */
     public static EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return getEntityManagerFactory().createEntityManager();
     }
 
     /**
@@ -50,7 +58,7 @@ public class JPAUtil {
      * <p>For graceful shutdown in real applications.</p>
      */
     public static void close() {
-        if (emf.isOpen()) {
+        if (emf != null && emf.isOpen()) {
             emf.close();
         }
     }
