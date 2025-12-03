@@ -24,7 +24,7 @@ import org.glassfish.jersey.server.ResourceConfig;
  * @see org.glassfish.jersey.jackson.JacksonFeature
  */
 
-@ApplicationPath("/api")
+@ApplicationPath("/")
 public class ApplicationConfig extends ResourceConfig {
 
     /**
