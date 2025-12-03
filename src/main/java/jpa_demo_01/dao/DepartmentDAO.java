@@ -71,6 +71,17 @@ public class DepartmentDAO {
 
     }
 
+    /**
+     * Counts the total number of employees belonging to a specific department.
+     *
+     * <p>This method queries the {@code dept_emp} table to determine how many
+     * employees are currently or historically associated with the given department.
+     * The result is used primarily for pagination validation in the
+     * department employee listing endpoint.
+     *
+     * @param deptNo the department number to count employees for
+     * @return the total number of employees in the specified department
+     */
     public long countEmployeesInDept(String deptNo) {
         TypedQuery<Long> query = em.createQuery(
                 "SELECT COUNT(de) FROM DeptEmp de WHERE de.department.deptNo = :deptNo",
